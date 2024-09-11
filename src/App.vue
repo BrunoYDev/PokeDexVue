@@ -1,26 +1,36 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <div v-for="(poke,index) in pokemons" :key="index">
+      <pokecard :name="poke.name" :url="poke.url" :num="index+1"/>
+    </div>
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios';
+import pokecard from './components/pokecard.vue';
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data(){
+    return {
+      pokemons: []
+    }
+  },
+  components:{
+      pokecard,
+  },
+  created(){
+    axios.get('https://pokeapi.co/api/v2/pokemon?limit=151&offset=0').then(res => {
+      this.pokemons = res.data.results;
+    })
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
 }
 </style>
